@@ -233,7 +233,7 @@ struct Matrix
 
 void Pivoting(Matrix matrix)
 {
-    for (int i = 0; i < matrix.Height; i++)
+    for (int i = 0; i < matrix.Width; i++)
     {
         for (int j = i + 1; j < matrix.Height; j++)
         {
