@@ -32,5 +32,8 @@
     <Text Include="dane2_2.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="dane3_1.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

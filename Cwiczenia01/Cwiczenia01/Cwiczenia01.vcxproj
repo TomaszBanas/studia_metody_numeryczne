@@ -134,6 +134,7 @@
     <Text Include="dane1_2.txt" />
     <Text Include="dane2_1.txt" />
     <Text Include="dane2_2.txt" />
+    <Text Include="dane3_1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

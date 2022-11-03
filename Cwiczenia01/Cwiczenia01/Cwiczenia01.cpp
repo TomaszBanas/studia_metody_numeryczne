@@ -37,6 +37,17 @@ struct Matrix
         Data[(x * Width) + y] = value;
     }
 
+    void ExchangeRows(int from, int to)
+    {
+        for (int i = 0; i < Width; i++)
+        {
+            double v1 = Get(from, i);
+            double v2 = Get(to, i);
+            Set(from, i, v2);
+            Set(to, i, v1);
+        }
+    }
+
     void Print()
     {
         /*cout << "Height:" << Height << endl;
@@ -231,7 +242,7 @@ struct Matrix
     }
 };
 
-void Pivoting(Matrix matrix)
+void GaussaElimination(Matrix matrix)
 {
     for (int i = 0; i < matrix.Width; i++)
     {
@@ -252,9 +263,8 @@ void Pivoting(Matrix matrix)
     matrix.Print();
 }
 
-void SimpleGause(Matrix matrix)
+void Reversed(Matrix matrix)
 {
-    Pivoting(matrix);
     double* xs = new double[matrix.Height];
     for (int i = matrix.Height - 1; i >= 0; i--)
     {
@@ -274,9 +284,65 @@ void SimpleGause(Matrix matrix)
     }
 }
 
+void SimpleGause(Matrix matrix)
+{
+    GaussaElimination(matrix);
+    Reversed(matrix);
+}
+
+void GaussaEliminationWithPivoting(Matrix matrix)
+{
+    for (int i = 0; i < matrix.Width; i++)
+    {
+        int maxIndex = i;
+        for (int j = i; j < matrix.Height; j++)
+        {
+            if (matrix.Get(j, i) > matrix.Get(maxIndex, i))
+                maxIndex = j;
+        }
+        if (maxIndex != i)
+            matrix.ExchangeRows(i, maxIndex);
+
+        for (int j = i + 1; j < matrix.Height; j++)
+        {
+            double m = matrix.Get(j, i) / matrix.Get(i, i);
+            for (int x = i; x < matrix.Width; x++)
+            {
+                double newData = matrix.Get(j, x) - (matrix.Get(i, x) * m);
+                matrix.Set(j, x, newData);
+            }
+        }
+        if (matrix.HasDiagonalZero())
+        {
+            throw "Matrix has diagonal 0!";
+        }
+    }
+    matrix.Print();
+}
+
+
+
+
+void CheckDiagonaloyStrong(Matrix matrix)
+{
+    for (int i = 0; i < matrix.Height; i++)
+    {
+        double valDiag = matrix.Get(i, i);
+        for (int j = 0; j < matrix.Width; j++)
+        {
+            if (i == j)
+                continue;
+
+            if(matrix.Get(i, j) >= valDiag)
+                throw "Matrix is not diagonally strong!";
+        }
+    }
+}
 
 void Jacobiego(Matrix matrix)
 {
+    CheckDiagonaloyStrong(matrix);
+
     Matrix LU = matrix.Clone(matrix.Height, matrix.Height).Triagonal();                     cout << "LU!-----------------------------------------------------------------------" << endl; LU.Print();
     Matrix D_reversed = matrix.Clone(matrix.Height, matrix.Height).Diagonal().Reversed();   cout << "D_reversed!---------------------------------------------------------------" << endl; D_reversed.Print();
     Matrix b = matrix.Clone(1, matrix.Height, matrix.Height, 0);                            cout << "b!------------------------------------------------------------------------" << endl; b.Print();
@@ -298,18 +364,17 @@ void Jacobiego(Matrix matrix)
     }
 }
 
-void JacobiegoWithPivoting(Matrix matrix)
+void Pivoting(Matrix matrix)
 {
-    Pivoting(matrix);
-    Jacobiego(matrix);
+    GaussaEliminationWithPivoting(matrix);
+    Reversed(matrix);
 }
-
 
 
 int mainData()
 {
     cout << "Case:";
-    int caseId = 1;
+    int caseId = 3;
     //cin >> caseId;
     cout << endl << "Selected: " << caseId << endl;
 
@@ -331,9 +396,9 @@ int mainData()
 
     if (caseId == 3)
     {
-        Matrix matrix = Matrix::LoadData("dane2_1.txt");
-        cout << "Jacobiego with pivot!" << endl;
-        JacobiegoWithPivoting(matrix);
+        Matrix matrix = Matrix::LoadData("dane3_1.txt");
+        cout << "Gause with pivot!" << endl;
+        Pivoting(matrix);
         return 0;
     }
 
