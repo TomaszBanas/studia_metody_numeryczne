@@ -242,28 +242,7 @@ struct Matrix
     }
 };
 
-void GaussaElimination(Matrix matrix)
-{
-    for (int i = 0; i < matrix.Width; i++)
-    {
-        for (int j = i + 1; j < matrix.Height; j++)
-        {
-            double m = matrix.Get(j, i) / matrix.Get(i, i);
-            for (int x = i; x < matrix.Width; x++)
-            {
-                double newData = matrix.Get(j, x) - (matrix.Get(i, x) * m);
-                matrix.Set(j, x, newData);
-            }
-        }
-        if (matrix.HasDiagonalZero())
-        {
-            throw "Matrix has diagonal 0!";
-        }
-    }
-    matrix.Print();
-}
-
-void Reversed(Matrix matrix)
+void ReversedGause(Matrix matrix)
 {
     double* xs = new double[matrix.Height];
     for (int i = matrix.Height - 1; i >= 0; i--)
@@ -284,10 +263,30 @@ void Reversed(Matrix matrix)
     }
 }
 
-void SimpleGause(Matrix matrix)
+void GaussaEliminationSingleColumn(Matrix matrix, int i)
 {
-    GaussaElimination(matrix);
-    Reversed(matrix);
+    for (int j = i + 1; j < matrix.Height; j++)
+    {
+        double m = matrix.Get(j, i) / matrix.Get(i, i);
+        for (int x = i; x < matrix.Width; x++)
+        {
+            double newData = matrix.Get(j, x) - (matrix.Get(i, x) * m);
+            matrix.Set(j, x, newData);
+        }
+    }
+    if (matrix.HasDiagonalZero())
+    {
+        throw "Matrix has diagonal 0!";
+    }
+}
+
+void GaussaElimination(Matrix matrix)
+{
+    for (int i = 0; i < matrix.Width; i++)
+    {
+        GaussaEliminationSingleColumn(matrix, i);
+    }
+    matrix.Print();
 }
 
 void GaussaEliminationWithPivoting(Matrix matrix)
@@ -303,32 +302,17 @@ void GaussaEliminationWithPivoting(Matrix matrix)
         if (maxIndex != i)
             matrix.ExchangeRows(i, maxIndex);
 
-        for (int j = i + 1; j < matrix.Height; j++)
-        {
-            double m = matrix.Get(j, i) / matrix.Get(i, i);
-            for (int x = i; x < matrix.Width; x++)
-            {
-                double newData = matrix.Get(j, x) - (matrix.Get(i, x) * m);
-                matrix.Set(j, x, newData);
-            }
-        }
-        if (matrix.HasDiagonalZero())
-        {
-            throw "Matrix has diagonal 0!";
-        }
+        GaussaEliminationSingleColumn(matrix, i);
     }
     matrix.Print();
 }
-
-
-
 
 void CheckDiagonaloyStrong(Matrix matrix)
 {
     for (int i = 0; i < matrix.Height; i++)
     {
         double valDiag = matrix.Get(i, i);
-        for (int j = 0; j < matrix.Width; j++)
+        for (int j = 0; j < matrix.Width-1; j++)
         {
             if (i == j)
                 continue;
@@ -338,6 +322,14 @@ void CheckDiagonaloyStrong(Matrix matrix)
         }
     }
 }
+
+
+void SimpleGause(Matrix matrix)
+{
+    GaussaElimination(matrix);
+    ReversedGause(matrix);
+}
+
 
 void Jacobiego(Matrix matrix)
 {
@@ -367,7 +359,7 @@ void Jacobiego(Matrix matrix)
 void Pivoting(Matrix matrix)
 {
     GaussaEliminationWithPivoting(matrix);
-    Reversed(matrix);
+    ReversedGause(matrix);
 }
 
 
