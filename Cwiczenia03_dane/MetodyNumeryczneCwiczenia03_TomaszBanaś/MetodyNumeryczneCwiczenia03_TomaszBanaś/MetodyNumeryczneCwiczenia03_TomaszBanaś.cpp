@@ -344,7 +344,7 @@ double Fun02(double x, Matrix m)
 int Zadanie02()
 {
 	Matrix m = Matrix::LoadData("Dane02.txt");
-	cout << "##### x: " << 1 << endl;
+	/*cout << "##### x: " << 1 << endl;
 	double y1 = Fun02(1, m);
 	cout << " y: " << y1 << endl;
 	cout << "##### x: " << 2 << endl;
@@ -358,9 +358,9 @@ int Zadanie02()
 	cout << " y: " << y4 << endl;
 	cout << "##### x: " << 5 << endl;
 	double y5 = Fun02(5, m);
-	cout << " y: " << y5 << endl;
+	cout << " y: " << y5 << endl;*/
 	cout << "##### x: " << 2.5 << endl;
-	double y2i5 = Fun02(1.5, m);
+	double y2i5 = Fun02(2.5, m);
 	cout << " y: " << y2i5 << endl;
 	return 0;
 }
@@ -369,8 +369,8 @@ int Zadanie02()
 int mainData()
 {
 	cout << "Case:";
-	int caseId = 2;
-	//cin >> caseId;
+	int caseId = 1;
+	cin >> caseId;
 	cout << endl << "Selected: " << caseId << endl;
 	if (caseId == 1)
 	{
@@ -388,7 +388,11 @@ int mainData()
 int main()
 {
 	try {
-		return mainData();
+		while (true)
+		{
+			mainData();
+		}
+		return 1;
 	}
 	catch (const CustomException& ex) {
 		cout << ex.Message << endl;

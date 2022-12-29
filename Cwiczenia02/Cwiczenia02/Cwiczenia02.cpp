@@ -199,7 +199,7 @@ int mainData()
 {
 	cout << "Case:";
 	int caseId = 4;
-	//cin >> caseId;
+	cin >> caseId;
 	cout << endl << "Selected: " << caseId << endl;
 	if (caseId == 1)
 	{
@@ -228,7 +228,11 @@ int mainData()
 int main()
 {
 	try {
-		return mainData();
+		while (true)
+		{
+			mainData();
+		}
+		return 1;
 	}
 	catch (const CustomException& ex) {
 		cout << ex.Message << endl;
